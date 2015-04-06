@@ -1,3 +1,4 @@
+# this is the dockerfile that builds the kfs base container
 FROM ubuntu
 
 # Update Ubuntu

@@ -378,7 +378,7 @@
                         </goals>
                         <configuration>
                             <imageName>rbtucker/kfs-container:UAF-${project.version}</imageName>
-                            <dockerDirectory>${project.basedir}/src/main/resources/docker/kfs</dockerDirectory>
+                            <dockerDirectory>${project.basedir}/src/main/resources/docker</dockerDirectory>
                             <skipDockerBuild>false</skipDockerBuild>
                             <resources>
                                 <resource>

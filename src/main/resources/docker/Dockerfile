@@ -1,3 +1,4 @@
+# this is the dockerfile that build the uaf-overlay container
 FROM rbtucker/kfs-container:base
 
 COPY kfs-build /var/lib/tomcat7/webapps
