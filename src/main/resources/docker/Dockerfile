@@ -21,6 +21,5 @@ RUN apt-get install oracle-java7-installer -y
 RUN apt-get -y install tomcat7
 
 # setup some environment variables
-ENV TOMCAT_WEBAPPS=/var/lib/tomcat7/webapps
-ENV TOMCAT_CONF=/var/lib/tomcat7/conf
-ENV TOMCAT_WEB_INF=/var/lib/tomcat7/webapps/kfs/WEB-INF
+ENV TOMCAT_CONF_DIRECTORY=/var/lib/tomcat7/conf
+ENV TOMCAT_STARTUP_CONFIG=/etc/default/tomcat7

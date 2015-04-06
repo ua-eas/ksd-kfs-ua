@@ -1,12 +1,11 @@
-FROM kfs-container:base
+FROM rbtucker/kfs-container:base
 
-# setup tomcat7 authbind so we can use port 80
-RUN touch /etc/authbind/byport/80
-RUN chmod 500 /etc/authbind/byport/80
-RUN chown tomcat7 /etc/authbind/byport/80
+COPY prd /var/lib/tomcat7/webapps
+COPY scripts /
 
-COPY prd  /var/lib/tomcat7/webapps
+ENV TOMCAT_CONFIGURATION_DIRECTORY=/var/local/kfs/config/tomcat-config/prd
 
-EXPOSE 22
+# install the admin app in local mode 
+RUN apt-get install tomcat7-admin 
 
-ENTRYPOINT $STARTUP_SCRIPT
+EXPOSE 8080
