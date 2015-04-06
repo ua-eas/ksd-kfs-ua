@@ -2,6 +2,8 @@
 .classpath
 .project
 .settings/
+# ignore netbeans
+nbactions.xml
 # ignore intellij
 .metadata
 .idea
