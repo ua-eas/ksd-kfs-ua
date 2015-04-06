@@ -21,11 +21,13 @@
         <enforcer.phase>validate</enforcer.phase>
     </properties>
     <dependencies>
+<!--
         <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc6</artifactId>
             <version>11.2.0.3.0</version>
         </dependency>
+        -->
         <dependency>
             <groupId>org.kuali.rice</groupId>
             <artifactId>rice-core-api</artifactId>
@@ -295,11 +297,11 @@
     </dependencies>
     <build>
         <resources>
-            <!-- kfs puts these resource under WEB-INF, by default they
-            would end up in WEB-INF/classes so we will exclude them here -->
             <resource>
                 <directory>src/main/resources</directory>
                 <excludes>
+                    <!-- kfs puts these resource under WEB-INF, by default they
+                        would end up in WEB-INF/classes so we will exclude them here -->                    
                     <exclude>configuration-examples/**</exclude>
                     <exclude>configuration-templates/**</exclude>
                     <exclude>docker/**</exclude>
