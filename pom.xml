@@ -6,11 +6,19 @@
     <groupId>edu.arizona</groupId>
     <artifactId>uaf-overlay</artifactId>
     <version>6.0</version>
+    <name>Kuali Financial System</name>
+    <description>Kuali Financial System</description>
     <packaging>war</packaging>
+    <prerequisites>
+        <maven>${maven.require.version}</maven>
+    </prerequisites>
     <properties>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
         <kuali.rice.version>2.1.9</kuali.rice.version>
+        <!-- maven properties -->
+        <maven.require.version>3.0</maven.require.version>
+        <enforcer.phase>validate</enforcer.phase>
     </properties>
     <dependencies>
         <dependency>
@@ -501,7 +509,7 @@
             <id>prd</id>
             <properties>
                 <build.environment>prd</build.environment>
-                <skip.tests>false</skip.tests>
+                <skip.tests>true</skip.tests>
             </properties>
         </profile>
     </profiles>
