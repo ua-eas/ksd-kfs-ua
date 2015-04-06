@@ -21,13 +21,6 @@
         <enforcer.phase>validate</enforcer.phase>
     </properties>
     <dependencies>
-<!--
-        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc6</artifactId>
-            <version>11.2.0.3.0</version>
-        </dependency>
-        -->
         <dependency>
             <groupId>org.kuali.rice</groupId>
             <artifactId>rice-core-api</artifactId>
@@ -223,6 +216,11 @@
         </dependency>
         -->
         <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>11.2.0.3.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-javamail_1.4_spec</artifactId>
             <version>1.7.1</version>
@@ -341,7 +339,7 @@
                             <goal>exploded</goal>
                         </goals>
                         <configuration>
-                            <webappDirectory>target/docker/${build.environment}/kfs</webappDirectory>
+                            <webappDirectory>target/docker/kfs-build/kfs</webappDirectory>
                             <overlays>
                                 <overlay>
                                     <groupId>org.kuali.kfs</groupId>
@@ -380,12 +378,8 @@
                         </goals>
                         <configuration>
                             <imageName>rbtucker/kfs-container:UAF-${project.version}</imageName>
-                            <dockerDirectory>${project.basedir}/src/main/resources/docker/${build.environment}</dockerDirectory>
+                            <dockerDirectory>${project.basedir}/src/main/resources/docker/kfs</dockerDirectory>
                             <skipDockerBuild>false</skipDockerBuild>
-                            <env>
-                                <TOMCAT_CONFIGURATION_DIRECTORY>/var/local/kfs/config/tomcat-config/${build.environment}</TOMCAT_CONFIGURATION_DIRECTORY>
-                                <KFS_ADDITIONAL_CONFIG_LOCATIONS>/var/local/kfs/config/security/${build.environment}</KFS_ADDITIONAL_CONFIG_LOCATIONS>
-                            </env>
                             <resources>
                                 <resource>
                                     <targetPath>/scripts/usr/local/bin</targetPath>
@@ -412,7 +406,7 @@
                         <configuration>
                             <argLine>-Xms1024m -Xmx1024m -XX:MaxPermSize=384m</argLine>
                             <skipTests>${skip.tests}</skipTests>
-                            <classesDirectory>target/docker/${build.environment}/kfs/WEB-INF/classes</classesDirectory>
+                            <classesDirectory>target/docker/kfs-build/kfs/WEB-INF/classes</classesDirectory>
                             <additionalClasspathElements>
                                 <additionalClasspathElement>${project.basedir}/src/test/resources</additionalClasspathElement>
                             </additionalClasspathElements>
@@ -486,35 +480,30 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <build.environment>local</build.environment>
                 <skip.tests>false</skip.tests>
             </properties>
         </profile>
         <profile>
             <id>dev</id>
             <properties>
-                <build.environment>dev</build.environment>
                 <skip.tests>false</skip.tests>
             </properties>
         </profile>
         <profile>
             <id>tst</id>
             <properties>
-                <build.environment>tst</build.environment>
                 <skip.tests>false</skip.tests>
             </properties>
         </profile>
         <profile>
             <id>stg</id>
             <properties>
-                <build.environment>stg</build.environment>
                 <skip.tests>false</skip.tests>
             </properties>
         </profile>
         <profile>
             <id>prd</id>
             <properties>
-                <build.environment>prd</build.environment>
                 <skip.tests>true</skip.tests>
             </properties>
         </profile>
