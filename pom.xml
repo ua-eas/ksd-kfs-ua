@@ -382,6 +382,10 @@
                             <imageName>rbtucker/kfs-container:UAF-${project.version}</imageName>
                             <dockerDirectory>${project.basedir}/src/main/resources/docker/${build.environment}</dockerDirectory>
                             <skipDockerBuild>false</skipDockerBuild>
+                            <env>
+                                <TOMCAT_CONFIGURATION_DIRECTORY>/var/local/kfs/config/tomcat-config/${build.environment}</TOMCAT_CONFIGURATION_DIRECTORY>
+                                <KFS_ADDITIONAL_CONFIG_LOCATIONS>/var/local/kfs/config/security/${build.environment}</KFS_ADDITIONAL_CONFIG_LOCATIONS>
+                            </env>
                             <resources>
                                 <resource>
                                     <targetPath>/scripts/usr/local/bin</targetPath>

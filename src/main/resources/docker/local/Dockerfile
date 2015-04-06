@@ -3,8 +3,6 @@ FROM rbtucker/kfs-container:base
 COPY local /var/lib/tomcat7/webapps
 COPY scripts /
 
-ENV TOMCAT_CONFIGURATION_DIRECTORY=/var/local/kfs/config/tomcat-config/local
-
 # install the admin app in local mode 
 RUN apt-get install tomcat7-admin 
 
