@@ -1,0 +1,42 @@
+1. Build an image from a Dockerfile
+   docker build <path-to-Dockerfile-directory>
+   example: docker build /var/local/dockerfiledir
+
+2. Run a docker image in interactive mode
+   docker run -i -t <docker-image-id> /bin/bash
+   example: docker run -i -t f31b8fe0f920 /bin/bash
+
+3. Show docker images in local docker repository
+   docker images
+
+4. Commit a docker container to local repository
+   docker commit <docker-container-id> <container-name>
+   example: docker commit e9e0eb2b7043 rbtucker/kfs-container:UAF-5.3
+
+5. Push docker container to dochub
+   docker push <container-name>
+   example: docker push rbtucker/kfs-container:UAF-5.3
+
+6. Remove docker image from local repository (force)
+   docker rmi -f <docker-image-id>
+   example: docker rmi -f f31b8fe0f920
+
+7. Remove all existing docker containers from local repository
+   docker rm -f `docker ps -a -q --no-trunc`
+
+7. Interactively run a command in a running docker container
+   docker exec -i -t <container-name> <some-command>
+   example: docker exec -i -t kfs-docker /bin/bash (this will take you to a command prompt in the kfs-docker container)
+
+8. Start KFS container as background process
+    docker run -d --name kfs-docker 
+        -e PLATFORM_CONFIGURATION_FILE=/var/local/kfs/config/local.properties 
+        -v /var/local/kfs/config:/var/local/kfs/config:rw 
+        -v /var/local/kfs/batch:/var/local/kfs/batch:rw 
+        -v /var/local/kfs/logs:/var/local/kfs/logs:rw 
+        -v /var/local/kfs/attachments:/var/local/kfs/attachments:rw 
+        -v /var/local/kfs/tmp:/var/local/kfs/tmp:rw 
+        -p 80:8080
+        rbtucker/kfs-container:UAF-5.3 /usr/local/bin/kfs-docker-startup.sh
+
+

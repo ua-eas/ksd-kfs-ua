@@ -1,0 +1,12 @@
+{ 
+    "s3bucket" : "ua-eas-uaf-testing", 
+    "containers": [ { 
+        "kfs": { 
+            "image": "rbtucker/kfs-container:UAF-5.3", 
+            "platformConfigurationFile" : "/var/local/kfs/config/local-config.properties", 
+            "containerPortMapping": "-p 80:8080", 
+            "forceImagePull" : "false", 
+            "volumes": "-v /var/local/kfs/config:/var/local/kfs/config:rw -v /var/local/kfs/batch:/var/local/kfs/batch:rw -v /var/local/kfs/logs:/var/local/kfs/logs:rw -v /var/local/kfs/attachments:/var/local/kfs/attachments:rw -v /var/local/kfs/tmp:/var/local/kfs/tmp:rw" 
+        } 
+    } ] 
+}
