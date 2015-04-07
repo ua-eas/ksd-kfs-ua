@@ -216,6 +216,7 @@
             <groupId>org.kuali.kfs</groupId>
             <artifactId>kfs</artifactId>
             <version>6.0.0-release-process-test-lib</version>
+            <scope>provided</scope>
         </dependency>        
         <dependency>
             <groupId>org.kuali.kfs</groupId>
@@ -358,8 +359,8 @@
                         </goals>
                         <configuration>
                             <webappDirectory>target/docker/kfs-build/kfs</webappDirectory>
-                            <!-- exclude some jars we do not need - the rice jars are overridden with 
-                                ua-specific versions, the servlet an jsp jars are provided by tomcat -->
+                            <!-- exclude some jars we do not need - the rice jars 
+                                are overridden with ua-specific versions -->
                             <dependentWarExcludes>**/rice-impl-2.1.9.jar</dependentWarExcludes>
                             <overlays>
                                 <overlay>
@@ -369,7 +370,7 @@
                                 </overlay>
                             </overlays>
                             <!-- kfs puts these resource under WEB-INF, by default they
-                            end up in WEB-INF/classes so we handle this here -->
+                                end up in WEB-INF/classes so we handle this here -->
                             <webResources>
                                 <resource>
                                     <directory>src/main/resources</directory>
