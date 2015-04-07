@@ -13,10 +13,13 @@
         <maven>${required.maven.version}</maven>
     </prerequisites>
     <properties>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <kuali.rice.version>2.1.9</kuali.rice.version>
-        
+
+        <!-- flag to prevent extracting overlay source war -->
+        <skip.overlay.extract>false</skip.overlay.extract>
+                
         <!-- maven properties -->
         <required.maven.version>3.0</required.maven.version>
         <enforcer.phase>validate</enforcer.phase>
