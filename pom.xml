@@ -20,6 +20,9 @@
         <!-- maven properties -->
         <maven.require.version>3.0</maven.require.version>
         <enforcer.phase>validate</enforcer.phase>
+        
+        <!-- unit/integration tests flag -->
+        <skip.tests>true</skip.tests>
     </properties>
     <dependencies>
         <dependency>
@@ -474,39 +477,4 @@
         </plugins>
     </reporting>
     -->
-    <profiles>
-        <profile>
-            <id>local</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <skip.tests>false</skip.tests>
-            </properties>
-        </profile>
-        <profile>
-            <id>dev</id>
-            <properties>
-                <skip.tests>false</skip.tests>
-            </properties>
-        </profile>
-        <profile>
-            <id>tst</id>
-            <properties>
-                <skip.tests>false</skip.tests>
-            </properties>
-        </profile>
-        <profile>
-            <id>stg</id>
-            <properties>
-                <skip.tests>false</skip.tests>
-            </properties>
-        </profile>
-        <profile>
-            <id>prd</id>
-            <properties>
-                <skip.tests>true</skip.tests>
-            </properties>
-        </profile>
-    </profiles>
 </project>
