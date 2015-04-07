@@ -6,7 +6,7 @@
     <groupId>edu.arizona</groupId>
     <artifactId>uaf-overlay</artifactId>
     <version>6.0</version>
-    <name>Kuali Financial System UAF-${project.version}</name>
+    <name>KFS UAF-${project.version} Overlay</name>
     <description>Kuali Financial System</description>
     <packaging>war</packaging>
     <prerequisites>
