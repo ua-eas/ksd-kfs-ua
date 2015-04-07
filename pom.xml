@@ -10,7 +10,7 @@
     <description>Kuali Financial System</description>
     <packaging>war</packaging>
     <prerequisites>
-        <maven>${maven.require.version}</maven>
+        <maven>${required.maven.version}</maven>
     </prerequisites>
     <properties>
         <maven.compiler.source>1.7</maven.compiler.source>
@@ -18,7 +18,7 @@
         <kuali.rice.version>2.1.9</kuali.rice.version>
         
         <!-- maven properties -->
-        <maven.require.version>3.0</maven.require.version>
+        <required.maven.version>3.0</required.maven.version>
         <enforcer.phase>validate</enforcer.phase>
         
         <!-- unit/integration tests flag -->
@@ -78,6 +78,16 @@
             <artifactId>rice-impl</artifactId>
             <version>${kuali.rice.version}</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.servlet.jsp</groupId>
+                    <artifactId>jsp-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.kuali.rice</groupId>
@@ -344,6 +354,9 @@
                         </goals>
                         <configuration>
                             <webappDirectory>target/docker/kfs-build/kfs</webappDirectory>
+                            <!-- exclude some jars we do not need - the rice jars are overridden with 
+                                ua-specific versions, the servlet an jsp jars are provided by tomcat -->
+                            <dependentWarExcludes>**/rice-impl-2.1.9.jar,**/rice-kim-impl-2.1.9.jar</dependentWarExcludes>
                             <overlays>
                                 <overlay>
                                     <groupId>org.kuali.kfs</groupId>
