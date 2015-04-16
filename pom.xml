@@ -484,6 +484,9 @@
                 </executions>
             </plugin>
             <!--
+                the plugin below will autostart the oracle test database but it runs as a daemeon and
+                the db is not fully up before tests start trying to access it -->
+           <!--
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>

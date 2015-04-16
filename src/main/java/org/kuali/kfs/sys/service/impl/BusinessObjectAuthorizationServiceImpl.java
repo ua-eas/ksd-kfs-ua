@@ -63,7 +63,7 @@ public class BusinessObjectAuthorizationServiceImpl extends org.kuali.rice.kns.s
      */
     @Override
     protected void considerBusinessObjectFieldUnmaskAuthorization(Object dataObject, Person user, BusinessObjectRestrictions businessObjectRestrictions, String propertyPrefix, Document document) {
-        //  **AZ UPGRADE 3.0-5.3** - null data object causes the application to throw NullPointerException
+        // UAF-6.0 upgrade - null data object causes the application to throw NullPointerException
         if (dataObject != null) {
             final DataDictionaryEntryBase objectEntry = (dataObject instanceof org.kuali.rice.krad.document.Document) ?
                     getDataDictionaryService().getDataDictionary().getDocumentEntry(getDataDictionaryService().getDocumentTypeNameByClass(dataObject.getClass())) :

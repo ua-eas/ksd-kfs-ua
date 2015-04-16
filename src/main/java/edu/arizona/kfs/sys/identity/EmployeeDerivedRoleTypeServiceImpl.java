@@ -29,7 +29,7 @@ import org.kuali.rice.coreservice.framework.parameter.ParameterService;
 import org.kuali.rice.kim.api.identity.affiliation.EntityAffiliation;
 import org.kuali.rice.kim.api.identity.entity.EntityDefault;
 
-// **AZ UPGRADE 3.0-5.3** 
+// UAF-6.0 upgrade
 public class EmployeeDerivedRoleTypeServiceImpl extends org.kuali.kfs.sys.identity.EmployeeDerivedRoleTypeServiceImpl {
     private EdsConstants edsConstants;
     private ParameterService parameterService;

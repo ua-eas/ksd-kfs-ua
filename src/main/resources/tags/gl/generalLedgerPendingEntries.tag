@@ -41,7 +41,7 @@
 
 <c:set var="isMaintenanceForm" value='false' />
 
-<%-- **AZ UPGRADE 3.0-5.3** - made some changes here to handle issue with parse excption --%>
+<%-- UAF-6.0 upgrade - made some changes here to handle issue with parse excption --%>
 <c:if test='<%= jspContext.findAttribute("KualiForm") != null %>'>
 	<c:set var="isMaintenanceForm" value='<%= jspContext.findAttribute("KualiForm").getClass() == org.kuali.rice.kns.web.struts.form.KualiMaintenanceForm.class %>' />
 </c:if>

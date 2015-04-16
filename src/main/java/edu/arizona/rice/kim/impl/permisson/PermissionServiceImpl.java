@@ -24,7 +24,7 @@ import org.kuali.rice.kim.api.KimConstants;
 import org.kuali.rice.kim.api.identity.IdentityService;
 import org.kuali.rice.kim.api.identity.entity.Entity;
 
-// **AZ UPGRADE 3.0-5.3** 
+// UAF-6.0 upgrade
 public class PermissionServiceImpl extends org.kuali.rice.kim.impl.permission.PermissionServiceImpl {
     private IdentityService identityService;
     private ConfigurationService configurationService;

@@ -1893,7 +1893,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
                     }
 
                     purapService.saveDocumentNoValidation(req);
-                    // **AZ UPGRADE 3.0-5.3** - not certain why I had to do this
+                    // UAF-6.0 upgrade - not certain why I had to do this
                     // but I changed Constants.SYSTEM_USER from  from "kfs" to "kfs-sys-user" 
                     // and one in createPurchaseOrderDocument it still showed "kfs"
                     // but this fixed it

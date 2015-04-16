@@ -86,7 +86,7 @@ public class KFSConstants {
     // right now, you HAVE to make sure that a 'kfs' user exists in your system, either in the DB
     // or in an external system such as LDAP if implemented
     
-    // **AZ UPGRADE 3.0-5.3** - change from "kfs" to "kfs-sys-user" - this is in our ldap
+    // UAF-6.0 upgrade - change from "kfs" to "kfs-sys-user" - this is in our ldap
     public static final String SYSTEM_USER = "kfs-sys-user";
 
     public static final String ENVIRONMENT_KEY = "environment";

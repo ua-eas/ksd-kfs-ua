@@ -15,7 +15,7 @@
  */
 package edu.arizona.kfs.sys.identity;
 
-// **AZ UPGRADE 3.0-5.3** 
+// UAF-6.0 upgrade
 
 /**
  * This class contains constants for EDS keys -- keys into the EDS schema

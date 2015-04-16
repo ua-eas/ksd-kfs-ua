@@ -394,7 +394,7 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
         // Iterate all source accounting lines on the document, deriving a
         // minimum limit from each according to chart, chart and account, and
         // chart and organization.
-        //  **AZ UPGRADE 3.0-5.3** - for some reason my ide did not like this for loop without the typecast
+        // UAF-6.0 upgrade - for some reason my ide did not like this for loop without the typecast
         for (SourceAccountingLine line : (List<SourceAccountingLine>)purapAccountingService.generateSummary(document.getItems())) {
             // check to make sure the account is in the auto approve exclusion list
             Map<String, Object> autoApproveMap = new HashMap<String, Object>();

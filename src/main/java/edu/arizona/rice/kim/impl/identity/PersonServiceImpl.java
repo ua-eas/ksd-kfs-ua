@@ -25,7 +25,7 @@ import org.kuali.rice.kim.impl.KIMPropertyConstants;
 import org.kuali.rice.kim.impl.identity.PersonImpl;
 import org.kuali.rice.kim.service.LdapIdentityService;
 
-// **AZ UPGRADE 3.0-5.3** 
+// UAF-6.0 upgrade
 public class PersonServiceImpl 
     extends org.kuali.rice.kim.impl.identity.PersonServiceImpl 
     implements PersonService {
