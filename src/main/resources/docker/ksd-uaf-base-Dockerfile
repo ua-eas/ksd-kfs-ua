@@ -1,0 +1,31 @@
+FROM uaksd/kuali-applications:ksd-base-0.1
+
+MAINTAINER rbtucker@email.arizona.edu
+
+# install development tools so we can get the ruby install setup
+RUN yum install -y libyaml zlib zlib-devel libyaml-devel libffi-devel openssl-devel && \
+	yum groupinstall -y "Development Tools"
+
+# install ruby 
+RUN cd /root/ && \
+	wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p484.tar.gz && \
+	tar xvzf ruby-1.9.3-p484.tar.gz && \
+	cd ruby-1.9.3-p484 && \
+	./configure && \
+	make && \
+	make install
+RUN cd /root/ && \
+	wget http://production.cf.rubygems.org/rubygems/rubygems-1.8.24.tgz && \
+	tar xvzf rubygems-1.8.24.tgz && \
+	cd rubygems-1.8.24 && \
+	ruby setup.rb
+RUN gem update --system && \
+	gem install rails
+
+# remove development tools required for ruby
+RUN yum group remove -y "Development Tools"
+	
+# setup kuali security users/groups
+RUN useradd -g kuali kbatch
+	
+	

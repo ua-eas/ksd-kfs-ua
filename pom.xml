@@ -25,11 +25,17 @@
         <enforcer.phase>validate</enforcer.phase>
         
         <!-- unit/integration tests flag -->
-        <skip.tests>false</skip.tests>
+        <skip.tests>true</skip.tests>
         
         <!-- directory where test runtime config properties can be found -->
         <test.properties.dir>/home/rbtucker/work/unit-test-config</test.properties.dir>
         <source.war.classes.extract.dir>target/war/work/org.kuali.kfs/kfs/WEB-INF/classes</source.war.classes.extract.dir>
+        
+        <uaf.build.number>1</uaf.build.number>
+        
+        <!-- docker image config/setup flags -->
+        <push.docker.image>false</push.docker.image>
+        <skip.docker.build>false</skip.docker.build>
     </properties>
     <dependencies>
         <dependency>
@@ -228,19 +234,17 @@
             <version>6.0.0-release-process-test</version>
             <type>war</type>
         </dependency>        
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>11.2.0.3.0</version>
+        </dependency>
         <!-- test dependencies -->
         <dependency>
             <groupId>org.kuali.kfs</groupId>
             <artifactId>foundation-tests</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>        
-        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc6</artifactId>
-            <version>11.2.0.3.0</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-javamail_1.4_spec</artifactId>
@@ -417,9 +421,10 @@
                             <goal>build</goal>
                         </goals>
                         <configuration>
-                            <imageName>rbtucker/kfs-container:UAF-${project.version}</imageName>
+                            <pushImage>${push.docker.image}</pushImage>
+                            <imageName>uaksd/kuali-applications:ksd-uaf-${project.version}-build${uaf.build.number}</imageName>
                             <dockerDirectory>${project.basedir}/src/main/resources/docker</dockerDirectory>
-                            <skipDockerBuild>false</skipDockerBuild>
+                            <skipDockerBuild>${skip.docker.build}</skipDockerBuild>
                             <resources>
                                 <resource>
                                     <targetPath>/scripts/usr/local/bin</targetPath>

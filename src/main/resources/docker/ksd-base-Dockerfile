@@ -1,0 +1,75 @@
+FROM centos
+
+MAINTAINER rbtucker@email.arizona.edu
+
+# update os
+RUN yum -y update 
+
+# install utilities/apps we need
+RUN yum -y install wget vim sudo tar git
+
+# setup kuali security users/groups
+RUN groupadd kuali && \
+	useradd -g kuali kualiadm 
+
+# create kuali service points/folders
+RUN mkdir -p /opt/kuali && \
+	mkdir -p /var/opt/kuali && \
+	mkdir -p  /etc/opt/kuali && \
+	chown -R kualiadm:kuali /var/opt/kuali && \
+	chown -R kualiadm:kuali /opt/kuali && \
+	chown -R kualiadm:kuali /etc/opt/kuali 
+
+# install java 8
+RUN cd /opt/ && \
+	wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u45-b14/jdk-8u45-linux-x64.tar.gz" && \
+	tar xzf jdk-8u45-linux-x64.tar.gz && \
+	rm jdk-8u45-linux-x64.tar.gz
+
+# run as user kualiadm
+USER kualiadm
+WORKDIR /home/kualiadm
+
+# pull ksi from git
+RUN git clone https://github.com/ua-eas/ksi.git 
+
+# get a newer version of tomcat 7 compatible with java 8
+RUN wget http://mirrors.ibiblio.org/apache/tomcat/tomcat-7/v7.0.61/bin/apache-tomcat-7.0.61.tar.gz && \
+	mkdir -p /home/kualiadm/ksi/components/tomcat/tomcat-7.0.61 && \
+    mv apache-tomcat-7.0.61.tar.gz /home/kualiadm/ksi/components/tomcat/tomcat-7.0.61 && \
+    cp /home/kualiadm/ksi/components/tomcat/tomcat-7.0.28/*.sh /home/kualiadm/ksi/components/tomcat/tomcat-7.0.61 && \
+    cp /home/kualiadm/ksi/components/tomcat/tomcat-7.0.28/*.tmpl /home/kualiadm/ksi/components/tomcat/tomcat-7.0.61 && \
+    rm -R /home/kualiadm/ksi/components/tomcat/tomcat-7.0.28 && \
+    rm -R /home/kualiadm/ksi/components/tomcat/tomcat-7.0.32 && \
+    rm /home/kualiadm/ksi/components/tomcat/*.end && \
+    touch /home/kualiadm/ksi/components/tomcat/tomcat-7.0.61.env && \
+	sed -ir 's/7\.0\.28/7\.0\.61/g' /home/kualiadm/ksi/components/tomcat/tomcat-7.0.61/*.sh && \
+	sed -ir 's/7\.0\.28/7\.0\.61/g' /home/kualiadm/ksi/components/tomcat/tomcat-7.0.61/*.tmpl
+
+# run ksi and install tomcat
+RUN touch /home/kualiadm/ksi/services/kuali/properties/kuali-docker.env && \
+	ksi/ksi.sh -s kuali -e docker -c tomcat -v 7.0.61 -i 1 -a install && \
+	ln -s /opt/kuali/tomcat/tomcat-7.0.61 /var/opt/kuali/tomcat/latest-tomcat && \
+	ln -s /opt/kuali/tomcat/tomcat-7.0.61 /var/opt/kuali/tomcat/ksd && \
+	ksi/ksi.sh -s kuali -e docker -c tomcat -v 7.0.61 -i 1 -a mkinst ksd 
+	
+# setup environment variables
+ENV JAVA_HOME=/opt/jdk1.8.0_45
+ENV PATH=$PATH:$JAVA_HOME/bin
+ENV TOMCAT_HOME_DIR=/var/opt/kuali/tomcat/latest-tomcat
+ENV TOMCAT_CONF_DIR=/var/opt/kuali/tomcat/latest-tomcat/conf
+ENV TOMCAT_WEBAPPS_DIR=/var/opt/kuali/tomcat/latest-tomcat/webapps
+ENV CATALINA_HOME=/var/opt/kuali/tomcat/latest-tomcat
+ENV CATALINA_BASE=/var/opt/kuali/tomcat/latest-tomcat
+ENV CATALINA_OUT=/transactional/logs/catalina.out
+
+# back to root and do some cleanup
+USER root
+WORKDIR /
+RUN yum -y remove git && \
+	yum clean all
+
+
+
+
+
