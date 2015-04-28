@@ -1,0 +1,3 @@
+#!/bin/bash
+/usr/local/bin/tomcat-ctl start
+exit 0

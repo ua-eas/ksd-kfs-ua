@@ -1,21 +1,5 @@
 #!/bin/bash
 
-mkdir -p $LOGS_DIRECTORY
-chmod 777 $LOGS_DIRECTORY
-
-# create file to save startup information
-touch $LOGS_DIRECTORY/kfs-startup.log
-
-# copy in tomcat platform configuration files
-cp $TOMCAT_CONFIG_DIRECTORY/server.xml $TOMCAT_CONF_DIR
-cp $TOMCAT_CONFIG_DIRECTORY/tomcat-users.xml $TOMCAT_CONF_DIR
-cp $TOMCAT_CONFIG_DIRECTORY/logging.properties $TOMCAT_CONF_DIR
-cp $TOMCAT_CONFIG_DIRECTORY/setenv.sh /var/opt/kuali/tomcat/ksd/bin
-cp $TOMCAT_CONFIG_DIRECTORY/log4j.properties $TOMCAT_KFS_WEBINF_DIR/classes
-
-
-source $CATALINA_HOME/bin/setenv.sh
-
 check_process () {
     PROCPIDS=`pgrep -u kualiadm -f "$1"`
     if [ "X$PROCPIDS" = "X" ]
@@ -30,21 +14,34 @@ tomcat_ksd_start () {
     if check_process
     then
         echo "Tomcat application server tomcat_ksd is already running." >> $LOGS_DIRECTORY/kfs-startup.log
-        return;
     else
         echo "Starting Tomcat application server tomcat_ksd ..." >> $LOGS_DIRECTORY/kfs-startup.log
-        sudo -u kualiadm $CATALINA_HOME/bin/startup.sh >> $LOGS_DIRECTORY/kfs-startup.log
-        sleep 1
-        if check_process
+
+        # copy in tomcat configuration files
+        sudo -u kualiadm cp $TOMCAT_CONFIG_DIRECTORY/server.xml $TOMCAT_CONF_DIR
+        sudo -u kualiadm cp $TOMCAT_CONFIG_DIRECTORY/tomcat-users.xml $TOMCAT_CONF_DIR
+        sudo -u kualiadm cp $TOMCAT_CONFIG_DIRECTORY/logging.properties $TOMCAT_CONF_DIR
+        sudo -u kualiadm cp $TOMCAT_CONFIG_DIRECTORY/setenv.sh /var/opt/kuali/tomcat/ksd/bin
+        sudo -u kualiadm cp $TOMCAT_CONFIG_DIRECTORY/log4j.properties $TOMCAT_KFS_WEBINF_DIR/classes
+
+        # load tomcat environment
+        source $CATALINA_HOME/bin/setenv.sh
+
+        # make logs directory and kfs-startup.log if they do not exists
+        if [ ! -f $LOGS_DIRECTORY/kfs-startup.log ] 
         then
-            echo "Tomcat application server tomcat_ksd started." >> $LOGS_DIRECTORY/kfs-startup.log
-            return;
-        else
-            echo "Unable to start Tomcat application server tomcat_ksd -- check the logs!" >> $LOGS_DIRECTORY/kfs-startup.log
+            mkdir -p $LOGS_DIRECTORY
+            touch $LOGS_DIRECTORY/kfs-startup.log
+            chown -R kualiadm $LOGS_DIRECTORY
+            chgrp -R kuali $LOGS_DIRECTORY
+            chmod -R 777 $LOGS_DIRECTORY
         fi
 
-        return;
+        # start tomcat as kualiadm
+        sudo -u kualiadm $CATALINA_HOME/bin/startup.sh >> $LOGS_DIRECTORY/kfs-startup.log
     fi
+
+    return;
 }
 
 tomcat_ksd_stop() {
@@ -58,16 +55,14 @@ tomcat_ksd_stop() {
         then
             PIDS=`pgrep -f -d' ' `
             echo "Unable to stop Tomcat application server tomcat_ksd: running PIDS are '$PIDS'." >> $LOGS_DIRECTORY/kfs-startup.log
-            return;
         else
             echo "Tomcat application server tomcat_ksd stopped." >> $LOGS_DIRECTORY/kfs-startup.log
         fi
-
-        return;
     else
         echo "Tomcat application server tomcat_ksd is already stopped." >> $LOGS_DIRECTORY/kfs-startup.log
-        return;
     fi
+
+    return;
 }
 
 tomcat_ksd_status () {
@@ -78,33 +73,30 @@ tomcat_ksd_status () {
     else
         echo "Tomcat application server tomcat_ksd is stopped." >> $LOGS_DIRECTORY/kfs-startup.log
     fi
+
     return;
 }
 
 case "$1" in
     'start')
            tomcat_ksd_start
-           exit 0
            ;;
     'stop')
            tomcat_ksd_stop
-           exit 0
            ;;
     'restart')
            tomcat_ksd_stop
            tomcat_ksd_start
-           exit 0
            ;;
     'status')
            tomcat_ksd_status
-           exit 0
            ;;
     *)
-           exit 1
+        echo "Invalid input parameter: $1." >> $LOGS_DIRECTORY/kfs-startup.log
+        exit 1
            ;;
 esac
 
 
 tail -f $LOGS_DIRECTORY/kfs-startup.log
-
 exit 0

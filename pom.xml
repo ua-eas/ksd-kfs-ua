@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>edu.arizona</groupId>
     <artifactId>uaf-overlay</artifactId>
-    <version>6.0</version>
+    <version>6.0.0</version>
     <name>KFS UAF-${project.version} Overlay</name>
     <description>Kuali Financial System</description>
     <packaging>war</packaging>
@@ -16,6 +16,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <kuali.rice.version>2.1.9</kuali.rice.version>
+        <kuali.kfs.version>6.0.0</kuali.kfs.version>
 
         <!-- flag to skip overlay source war extract -->
         <skip.overlay.extract>false</skip.overlay.extract>
@@ -224,14 +225,68 @@
         </dependency>
         <dependency>
             <groupId>org.kuali.kfs</groupId>
-            <artifactId>kfs</artifactId>
-            <version>6.0.0-release-process-test-lib</version>
+            <artifactId>kfs-ar</artifactId>
+            <version>${kuali.kfs.version}</version>
             <scope>provided</scope>
-        </dependency>        
+        </dependency>     
         <dependency>
             <groupId>org.kuali.kfs</groupId>
-            <artifactId>kfs</artifactId>
-            <version>6.0.0-release-process-test</version>
+            <artifactId>kfs-bc</artifactId>
+            <version>${kuali.kfs.version}</version>
+            <scope>provided</scope>
+        </dependency>     
+        <dependency>
+            <groupId>org.kuali.kfs</groupId>
+            <artifactId>kfs-cam</artifactId>
+            <version>${kuali.kfs.version}</version>
+            <scope>provided</scope>
+        </dependency>     
+        <dependency>
+            <groupId>org.kuali.kfs</groupId>
+            <artifactId>kfs-cg</artifactId>
+            <version>${kuali.kfs.version}</version>
+            <scope>provided</scope>
+        </dependency>     
+        <dependency>
+            <groupId>org.kuali.kfs</groupId>
+            <artifactId>kfs-core</artifactId>
+            <version>${kuali.kfs.version}</version>
+            <scope>provided</scope>
+        </dependency>     
+        <dependency>
+            <groupId>org.kuali.kfs</groupId>
+            <artifactId>kfs-ec</artifactId>
+            <version>${kuali.kfs.version}</version>
+            <scope>provided</scope>
+        </dependency>     
+        <dependency>
+            <groupId>org.kuali.kfs</groupId>
+            <artifactId>kfs-kc</artifactId>
+            <version>${kuali.kfs.version}</version>
+            <scope>provided</scope>
+        </dependency>     
+        <dependency>
+            <groupId>org.kuali.kfs</groupId>
+            <artifactId>kfs-ld</artifactId>
+            <version>${kuali.kfs.version}</version>
+            <scope>provided</scope>
+        </dependency>     
+        <dependency>
+            <groupId>org.kuali.kfs</groupId>
+            <artifactId>kfs-purap</artifactId>
+            <version>${kuali.kfs.version}</version>
+            <scope>provided</scope>
+        </dependency>     
+        <dependency>
+            <groupId>org.kuali.kfs</groupId>
+            <artifactId>kfs-tem</artifactId>
+            <version>${kuali.kfs.version}</version>
+            <scope>provided</scope>
+        </dependency>     
+        <dependency>
+            <groupId>org.kuali.kfs</groupId>
+            <artifactId>kfs-web</artifactId>
+            <version>${kuali.kfs.version}</version>
             <type>war</type>
         </dependency>        
         <dependency>
@@ -242,8 +297,9 @@
         <!-- test dependencies -->
         <dependency>
             <groupId>org.kuali.kfs</groupId>
-            <artifactId>foundation-tests</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kfs-core</artifactId>
+            <version>${kuali.kfs.version}</version>
+            <classifier>tests</classifier>
         </dependency>        
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
@@ -304,6 +360,12 @@
             <artifactId>jasperreports</artifactId>
             <version>5.6.1</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-beanutils</groupId>
+                    <artifactId>commons-beanutils</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.velocity</groupId>
@@ -381,13 +443,13 @@
                         </goals>
                         <configuration>
                             <webappDirectory>target/docker/kfs-build/kfs</webappDirectory>
-                            <!-- exclude some jars we do not need - the rice jars 
-                            are overridden with ua-specific versions -->
-                            <dependentWarExcludes>**/rice-impl-2.1.9.jar</dependentWarExcludes>
+                            <!-- exclude some jars we do not need or that have an old version being pulled 
+                            in for some reason - the rice jars are overridden with ua-specific versions -->
+                            <dependentWarExcludes>**/rice-impl-2.1.9.jar,**/commons-beanutils-1.7.0.jar</dependentWarExcludes>
                             <overlays>
                                 <overlay>
                                     <groupId>org.kuali.kfs</groupId>
-                                    <artifactId>kfs</artifactId>
+                                    <artifactId>kfs-web</artifactId>
                                     <skip>${skip.overlay.extract}</skip>
                                 </overlay>
                             </overlays>
@@ -429,7 +491,6 @@
                                 <resource>
                                     <targetPath>/scripts/usr/local/bin</targetPath>
                                     <directory>${project.basedir}/src/main/resources/docker/scripts</directory>
-                                    <include>*.sh</include>
                                 </resource>
                             </resources>
                         </configuration>
@@ -481,7 +542,7 @@
                                     <artifactId>foundation-tests</artifactId>
                                     <version>${project.version}</version>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>target/test-classes</outputDirectory>
+                                    <outputDirectory>target/test-classess</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
@@ -489,9 +550,9 @@
                 </executions>
             </plugin>
             <!--
-                the plugin below will autostart the oracle test database but it runs as a daemeon and
-                the db is not fully up before tests start trying to access it -->
-           <!--
+            the plugin below will autostart the oracle test database but it runs as a daemeon and
+            the db is not fully up before tests start trying to access it -->
+            <!--
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>

@@ -5,6 +5,9 @@ FROM uaksd/kuali-applications:ksd-uaf-base-0.1
 COPY kfs-build /var/opt/kuali/tomcat/latest-tomcat/webapps
 COPY scripts /
 
+# set kfs web app directory owner and group
+RUN chown -R kualiadm:kuali /var/opt/kuali/tomcat/latest-tomcat/webapps/kfs
+
 # create some useful shorcut environment variables
 ENV TOMCAT_KFS_DIR=/var/opt/kuali/tomcat/latest-tomcat/webapps/kfs
 ENV TOMCAT_KFS_WEBINF_DIR=/var/opt/kuali/tomcat/latest-tomcat/webapps/kfs/WEB-INF
