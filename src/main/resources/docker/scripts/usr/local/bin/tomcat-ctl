@@ -37,7 +37,6 @@ tomcat_ksd_start () {
         chown kualidm:kuali /var/opt/kuali/tomcat/ksd/bin/setenv.sh
         chmod +x /var/opt/kuali/tomcat/ksd/bin/setenv.sh
 
-        # start tomcat as kualiadm
         $CATALINA_HOME/bin/startup.sh >> $LOGS_DIRECTORY/kfs-startup.log
         
         # tail the startup log to keep tomcat running
