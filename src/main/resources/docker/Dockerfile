@@ -16,6 +16,6 @@ ENV CONFIG_DIRECTORY=/configuration
 ENV LOGS_DIRECTORY=/transactional/logs
 ENV SECURITY_DIRECTORY=/security
 ENV TOMCAT_CONFIG_DIRECTORY=/configuration/tomcat-config
-ENV KFS_CONFIG_DIRECTORY=/configuration/config
+ENV KFS_CONFIG_DIRECTORY=/configuration/kfs-config
 
 ENTRYPOINT /usr/local/bin/tomcat-start
