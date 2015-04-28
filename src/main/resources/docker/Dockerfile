@@ -14,10 +14,8 @@ ENV TOMCAT_KFS_WEBINF_DIR=/var/opt/kuali/tomcat/latest-tomcat/webapps/kfs/WEB-IN
 ENV TRANSACTIONAL_DIRECTORY=/transactional
 ENV CONFIG_DIRECTORY=/configuration
 ENV LOGS_DIRECTORY=/transactional/logs
+ENV SECURITY_DIRECTORY=/security
 ENV TOMCAT_CONFIG_DIRECTORY=/configuration/tomcat-config
 ENV KFS_CONFIG_DIRECTORY=/configuration/config
 
-
-
-
-
+ENTRYPOINT /usr/local/bin/tomcat-start
