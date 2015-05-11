@@ -6,7 +6,7 @@
     <groupId>edu.arizona</groupId>
     <artifactId>uaf-overlay</artifactId>
     <version>6.0.0</version>
-    <name>KFS UAF-${project.version} Overlay</name>
+    <name>KSD KFS UA ${project.version} Overlay</name>
     <description>Kuali Financial System</description>
     <packaging>war</packaging>
     <prerequisites>
@@ -18,25 +18,15 @@
         <kuali.rice.version>2.1.9</kuali.rice.version>
         <kuali.kfs.version>6.0.0</kuali.kfs.version>
 
-        <!-- flag to skip overlay source war extract -->
-        <skip.overlay.extract>false</skip.overlay.extract>
-                
         <!-- maven version check properties -->
         <required.maven.version>3.0</required.maven.version>
         <enforcer.phase>validate</enforcer.phase>
-        
-        <!-- unit/integration tests flag -->
-        <skip.tests>true</skip.tests>
         
         <!-- directory where test runtime config properties can be found -->
         <test.properties.dir>/home/rbtucker/work/unit-test-config</test.properties.dir>
         <source.war.classes.extract.dir>target/war/work/org.kuali.kfs/kfs/WEB-INF/classes</source.war.classes.extract.dir>
         
         <uaf.build.number>1</uaf.build.number>
-        
-        <!-- docker image config/setup flags -->
-        <push.docker.image>false</push.docker.image>
-        <skip.docker.build>false</skip.docker.build>
     </properties>
     <dependencies>
         <dependency>
@@ -294,6 +284,17 @@
             <artifactId>ojdbc6</artifactId>
             <version>11.2.0.3.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>1.18.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.json</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <!-- test dependencies -->
         <dependency>
             <groupId>org.kuali.kfs</groupId>
@@ -437,7 +438,7 @@
                     </execution>
                     <execution>
                         <id>war-exploded</id>
-                        <phase>process-classes</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>exploded</goal>
                         </goals>
@@ -573,4 +574,69 @@
             -->
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>local-init-profile</id>
+            <properties>
+                <!-- unit/integration tests flag -->
+                <skip.tests>true</skip.tests>
+                <!-- flag to skip overlay source war extract -->
+                <skip.overlay.extract>false</skip.overlay.extract>
+                <!-- docker image config/setup flags -->
+                <push.docker.image>false</push.docker.image>
+                <skip.docker.build>true</skip.docker.build>
+            </properties>
+        </profile>
+        <profile>
+            <id>local-profile</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <!-- unit/integration tests flag -->
+                <skip.tests>true</skip.tests>
+                <!-- flag to skip overlay source war extract -->
+                <skip.overlay.extract>true</skip.overlay.extract>
+                <!-- docker image config/setup flags -->
+                <push.docker.image>false</push.docker.image>
+                <skip.docker.build>true</skip.docker.build>
+            </properties>
+        </profile>
+        <profile>
+            <id>release-with-tests-profile</id>
+            <properties>
+                <!-- unit/integration tests flag -->
+                <skip.tests>false</skip.tests>
+                <!-- flag to skip overlay source war extract -->
+                <skip.overlay.extract>false</skip.overlay.extract>
+                <!-- docker image config/setup flags -->
+                <push.docker.image>false</push.docker.image>
+                <skip.docker.build>false</skip.docker.build>
+            </properties>
+        </profile>
+        <profile>
+            <id>release-profile</id>
+            <properties>
+                <!-- unit/integration tests flag -->
+                <skip.tests>true</skip.tests>
+                <!-- flag to skip overlay source war extract -->
+                <skip.overlay.extract>false</skip.overlay.extract>
+                <!-- docker image config/setup flags -->
+                <push.docker.image>false</push.docker.image>
+                <skip.docker.build>false</skip.docker.build>
+            </properties>
+        </profile>
+        <profile>
+            <id>release-with-dochub-push-profile</id>
+            <properties>
+                <!-- unit/integration tests flag -->
+                <skip.tests>true</skip.tests>
+                <!-- flag to skip overlay source war extract -->
+                <skip.overlay.extract>false</skip.overlay.extract>
+                <!-- docker image config/setup flags -->
+                <push.docker.image>true</push.docker.image>
+                <skip.docker.build>false</skip.docker.build>
+            </properties>
+        </profile>
+    </profiles>
 </project>
