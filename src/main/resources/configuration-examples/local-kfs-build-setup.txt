@@ -1,0 +1,46 @@
+KFS 6.0 local build/run configuration setup
+--------------------------------------------
+
+1. linux docker install:
+	sudo apt-get update
+	sudo apt-get install docker.io
+	
+2. After doc install we need to move docker because it installs in the root by default
+   which will end up filling up root. To move docker see instructions at 
+   http://alexander.holbreich.org/2014/07/moving-docker-images-different-partition/
+
+3. Modify docker default options in docker in /etc/default/docker. The spotify maven plugin
+   expects docker daemon to be running on tcp port 2375 so set that up here. All docker commands
+   will then need to be run with the -H tcp://127.0.0.1:2375 option to connect to the
+   docker daemon.
+   
+   DOCKER_OPTS="-H tcp://127.0.0.1:2375
+   export TMPDIR="/<desired-tmp-directory>"
+	
+
+4. Create a startup script similar to the following to startup a docker tomcat instance that points to a
+   to your local kfs build output folder.
+   
+	docker -H tcp://127.0.0.1:2375 run -d --name kfs-docker \
+    -v <local-configuration-directory>/configuration:/configuration \
+    -v <local-security-directory>:/security \
+    -v <local-work-directory>:/transactional:rw \
+    -v <local-logs-directory>:/logs:rw \
+    -v <kfs-ksd-ua-overlay-project-root>/target/docker/kfs-build/kfs:/var/opt/kuali/tomcat/latest-tomcat/webapps/kfs:rw \
+    -p 8080:8080 uaksd/kuali-applications:ksd-uaf-6.0.0-build1 tomcat-start
+    
+5. The kfs-ksd-ua maven project has 5 profiles:
+	
+	a. local-init-profile - this profile pulls and extracts the foundation war file to use for the overlay then build kfs
+	b. local-profile - this profile assumes that the foundation war has been extracted so it only builds the ua overlay files
+	c. release-with-tests-profile - this profile builds the release kfs docker container after running tests
+	d. release-profile - this profile builds the release kfs docker container with no tests run
+	e. release-with-dochub-push-profile - this profile builds the release kfs docker container with no tests and 
+	   pushes the built container to dochub
+
+6. To start docker run the script created in step 4. An example config/security directory layout can be found in the
+    zip file <kds-kfs-ua-project-dir>/src/main/resources/configuration-examples/directory-layout-example.zip. This layout
+    must be in place and the appropriate -v entries in the startup script passed to docker to successfully run kfs on
+    the local docker container.
+   
+
